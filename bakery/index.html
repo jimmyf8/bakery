@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>MaBoulangerie</title><!--title-->
+</head>
+<body>
+    <div id="app">
+        <h1>MaBoulangerie</h1><!--h1-->
+        <section class="user">
+            <h2>Utilisateur: {{userName}}</h2>
+            <div>
+                <label for="name">Nom:</label><br><br>
+                <input id="name" type="text" v-model="userName" v-on:keyup.text.enter="alertTodo()" /><br><br>
+                <label for="firstName">Prénom:</label><br><br>
+                <input id="firstName" type="text" v-model="userFirstName" v-on:keyup.text.enter="alertTodo()" /><br><br>
+                <label for="pw">Mot de passe</label><br><br>
+                <input id="pw" type="password" v-model="password"><br><br>
+                <button @click="alertTodo()">envoyer</button>
+            </div>
+            <div class="age">
+                <!--age-->
+                <h3>Mon âge</h3>
+                <p>je suis âgé de {{age}} ans.</p>
+                <button @click="age++">ajouter</button>
+                <button @click="subtract(1)"> retirer</button>
+            </div>
+        </section>
+        <section class="cakes"><!--cakes-->
+            <div class="muffin">
+                <button @click="showModal =!showModal">Muffin</button>
+            </div>
+            <div v-show="showModal" class="modal">
+                <div v-for="data in shoppingCart" >
+                    <ul>
+                        <li >
+                            <img :src="data.image.src" :alt="data.image.alt">
+                            <p><a v-bind:href="data.url">{{ data.label}}</a> : {{ data.cost}} €</p><!--price-->
+                        </li>
+                       
+                    </ul>
+                </div>
+                <p  class="price">Total: {{totalPrice}} €</p>
+                
+               
+            </div>
+        </section>
+        <h2>Panier</h2>
+        <footer><!--footer-->
+            <div class="timetable">
+                <h2>Horaires d'ouverture</h2>
+                <p>{{mail}}</p>
+                <p>Dimanche: 10h - 16h</p>
+                <p>Du lundi au vendredi: 09h - 17h</p>
+                <p>Samedi: 09h30 - 18h00</p>
+            </div>
+            <p>{{copyright}}</p><!--copyright-->
+        </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script><!--script-->
+    <script>
+        console.log(Vue)
+        const app = new Vue({
+            el: '#app',
+            data: {
+                userName: '',
+                userFirstName:'',
+                password:'',
+                age: "",
+                showModal: true,
+                message: `MaBoulangerie`,
+                mail: "jimmy.farescourt@gmail.com",
+                shoppingCart: [
+                    { label: 'Muffin chocolat', cost: 6, image:{src:"./images/muffin_chocolat.jpg",alt:"muffin au chocolat"}, url: 'https:/www.google.com' },
+                    { label: 'Muffin fraise', cost: 24, image:{src:"./images/muffin_fraise.jpg",alt:"muffin aux fraises"}, url: 'https:/www.google.com' },
+                    { label: 'Muffin mûres', image:{src:"./images/muffin_mûres.jpg",alt:"muffin aux mûres"}, cost: 2, url: 'https:/www.google.com' }
+                ]
+            },
+            methods: {
+                alertTodo: function() {
+                    alert('bienvenue  '+this.userName+'  '+ this.userFirstName);
+                },
+                subtract: function (dec) {
+                    this.age -= dec;
+                }
+            },
+            computed: {
+                totalPrice() {
+                    let total = 0;
+                    this.shoppingCart.forEach(data => {
+                        total += data.cost
+                    })
+                    return total
+                },
+                copyright() {
+                    const currentYear = new Date().getFullYear();
+                    return `copyright   ${this.message} ` + currentYear
+                }
+
+            }
+        })
+    </script>
+</body>
+
+</html>
